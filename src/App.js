@@ -4,6 +4,7 @@ import Tipbutton from "./component/Tipbutton"
 import Amount from "./component/Amount"
 import Person from "./component/Person"
 import Result from './component/Result'
+import ResetButton from "./component/ResetButton"
 
 function App() {
 const [amount, amountState] = useState("") 
@@ -30,13 +31,21 @@ useEffect(()=>{
   else{
    checkEmptyState(true)
   }
-if(disc !== "")
-{
+
+ if(disc !== "")
+ {
   Cal(disc)
-}
+  resetState(false)
+ }
 
  },[amount,person,disc])
 
+useEffect(()=>{
+if(reset==true)
+{
+  resetState(false)
+}
+ },[reset])
 
 const handleReset = () =>{
   customvalueState("")
@@ -44,6 +53,8 @@ const handleReset = () =>{
   personState("")
   totalState("0.00") 
   tipPersonState("0.00")
+  discState("")
+  errorsState({amountError:false, personError:false}) 
   resetState(true)
 }
 
@@ -64,12 +75,11 @@ const handlePerson = (e) =>{
   
   function Cal(dis)
   {
-    if(reset !== true)
-    {
+     
       if(amount == 0 || amount=== ""){
 
         errorsState(prevState =>({...prevState, amountError:true}))
-     
+
       }
        else if(person == 0 || person === ""){
         errorsState(prevState =>({...prevState, amountError:false}))
@@ -83,8 +93,9 @@ const handlePerson = (e) =>{
         let k = amount/person
         totalState(Math.round(k * 100) / 100) 
         tipPersonState(Math.round(k*discount * 100) / 100)
+        
        }
-    }
+    
   }
 
   return (
@@ -97,7 +108,7 @@ const handlePerson = (e) =>{
          <Amount handleAmount={handleAmount} amount={amount} errors={errors.amountError}></Amount>
 
          <Tipbutton handleDiscount={handleDiscount} handleCustomValue={handleCustomValue} 
-         customValue={customValue}
+         customValue={customValue} reset={reset}
          ></Tipbutton>
       
          <Person handlePerson={handlePerson} person={person}  errors={errors.personError}></Person>
@@ -109,10 +120,7 @@ const handlePerson = (e) =>{
          
          <Result tipPerson={tipPerson} total={total}></Result>
 
-        <button className="[ width-100 bg-primary-100 ]" 
-        data-type={checkEmpty?"invalid":"reset"}
-        onClick={handleReset}
-        > RESET</button>
+         <ResetButton handleReset={handleReset} checkEmpty={checkEmpty} ></ResetButton>
         </div>
       </div>
       </main>

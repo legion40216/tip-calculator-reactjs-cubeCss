@@ -194,6 +194,7 @@ button[data-type="reset"]:hover{
 button[data-type="invalid"]{
 	color: hsl(184deg 100% 19%);
 	background-color: hsl(183deg 79% 24%);
+	cursor: default;
 	}
 	
 
